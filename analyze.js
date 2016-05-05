@@ -1,31 +1,27 @@
 var _ = require("lodash");
 
 var freelancerSorter = function(freelancers) {
-  var totalIncome = _.reduce(freelancers, function(result, value, key) {
-      return result + value.income;
+  var freelancers = _.sortBy(freelancers, 'income');
+
+  var totalIncome = _.reduce(freelancers, function(sum, value) {
+      return sum + value.income;
     }, 0);
 
   var averageIncome = totalIncome/freelancers.length;
 
-  overperformers = _.chain(freelancers)
-    .filter(function(freelancer) {
+  overperformers = _.filter(freelancers, function(freelancer) {
       return freelancer.income > averageIncome;
-    })
-    .sortBy('income')
-    .value();
+    });
 
-  underperformers = _.chain(freelancers)
-    .filter(function(freelancer) {
+  underperformers = _.filter(freelancers, function(freelancer) {
       return freelancer.income <= averageIncome;
-    })
-    .sortBy('income')
-    .value();
+    });
 
-  return result = {
+  return {
     'average':      averageIncome,
     'underperform': underperformers,
     'overperform':  overperformers
-  }
+  };
 };
 
 module.exports = freelancerSorter;
